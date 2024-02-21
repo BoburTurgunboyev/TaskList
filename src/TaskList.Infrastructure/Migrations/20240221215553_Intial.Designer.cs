@@ -12,8 +12,8 @@ using TaskList.Infrastructure.Data;
 namespace TaskList.Infrastructure.Migrations
 {
     [DbContext(typeof(TaskDbContext))]
-    [Migration("20240215192144_Initial")]
-    partial class Initial
+    [Migration("20240221215553_Intial")]
+    partial class Intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,48 @@ namespace TaskList.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "9839652b-6fcd-4789-a63f-a30e8e3c03a9",
+                            ConcurrencyStamp = "1",
+                            Name = "Admin",
+                            NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "86aa55a5-258b-4541-aefd-157641bbc78f",
+                            ConcurrencyStamp = "3",
+                            Name = "Manager",
+                            NormalizedName = "Manager"
+                        },
+                        new
+                        {
+                            Id = "ba14b8e8-be61-4da9-b143-1eea078b5374",
+                            ConcurrencyStamp = "2",
+                            Name = "User",
+                            NormalizedName = "User"
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {

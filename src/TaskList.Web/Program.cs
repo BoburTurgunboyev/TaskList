@@ -1,13 +1,23 @@
-using System;
+using TaskList.Application.Services.AccountServ;
+using TaskList.Application.Services.TaskServ;
 using TaskList.Domain.Entities;
 using TaskList.Infrastructure.Data;
+using TaskList.Infrastructure.Repositories.TaskRepo;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<TaskDbContext>();
+// Add Services
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();  
 
+
+// Add Repositories
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 builder.Services.AddIdentity<User, Role>(options =>
@@ -35,10 +45,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Task}/{action=Index}/{id?}");
 
 app.Run();

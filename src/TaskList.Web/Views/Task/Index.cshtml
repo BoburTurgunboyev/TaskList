@@ -1,0 +1,135 @@
+﻿@model IEnumerable<TaskList.Domain.Entities.Task>
+
+@{
+    ViewData["Title"] = "Index";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if(ViewBag.Pager !=null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<h2>Task</h2>
+
+@* @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{ *@
+    <p>
+    <a asp-action="Create" class="btn btn-success" style="font-size:10px">Create New</a>
+       @*  <button class="btn btn-dark" onclick="location.pathname = '@Url.Action("Index", "AuditView")'">Audit View</button>
+        <button class="btn btn-info" onclick="location.pathname = 'swagger'">Swagger</button> *@
+    </p>
+
+@* } *@
+<table class="table">
+    <thead>
+        <tr class="bold">
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                DueDate
+            </th>
+
+            <th>
+                Status
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="font-size:10px">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td style="font-size:10px">
+                    @if (@item.Description.Count() > 20)
+                    {
+                        @item.Description[..20]
+                        
+                    }
+                    else
+                    {
+                        @item.Description
+                        
+                    }
+                    @* @Html.DisplayFor(modelItem => item.Description)
+ *@                </td>
+                <td style="font-size:10px">
+                    @Html.DisplayFor(modelItem => item.DueDate)
+                </td>
+                <td style="font-size:10px">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+               @*  @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                { *@
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success" style="font-size:10px">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary" style="font-size:10px">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" style="font-size:10px">Delete</a>
+                    </td>
+
+@*                 } *@
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="container" style="font-size:10px">
+    @if (pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+
+
+            @if (pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Task" asp-action="Index"
+                    asp-route-pg="1">First</a>
+                </li>
+                <li>
+                    <a class="page-link" asp-controller="Task" asp-action="Index"
+                    asp-route-pg="@(pager.CurrentPage-1)">Previous</a>
+                </li>
+            }
+
+            @for (var pge = pager.StartPage; pge <pager.EndPage;pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ? "active" :"")">
+                    <a class="page-link" asp-controller="Task" asp-action="Index"
+                    asp-route-pg="@pge">
+                        @pge
+                    </a>
+                </li>
+            }
+            @if (pager.CurrentPage<pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Task" asp-action="Index" 
+                    asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                </li>
+                <li>
+                    <a class="page-link" asp-controller="Task" asp-action="Index"
+                    asp-route-pg="@(pager.TotalPages)">Last</a>
+                </li>
+            }
+
+        </ul>
+    }
+
+</div>
+
+<style>
+    .bold {
+        font-weight: bold;
+        font-size: 15px
+    }
+   
+</style>
